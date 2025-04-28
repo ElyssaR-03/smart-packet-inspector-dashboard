@@ -12,6 +12,10 @@ import matplotlib.pyplot as plt
 packet_list = []
 protocol_counter = Counter()
 
+# Alert system counter
+ip_counter = {}
+ip_timestamps = {}
+
 # Setup CSV file
 csv_filename = "live_packet_log.csv"
 headers = ["Timestamp", "Source IP", "Destination IP", "Protocol", "Source Port", "Destination Port"]
@@ -50,6 +54,23 @@ def process_packet(packet):
         with open(csv_filename, mode='a', newline='') as f:
             writer = csv.writer(f)
             writer.writerow([timestamp, src_ip, dst_ip, protocol, src_port, dst_port])
+
+        current_time = time.time()
+
+        if src_ip not in ip_counter:
+            ip_counter[src_ip] = 0
+            ip_timestamps[src_ip] = current_time
+
+        #Updates counter for the source IP
+        ip_counter[src_ip] += 1
+
+        # Check if the IP has sent more than 10 packets in the last 60 seconds
+        ip_timestamps[src_ip] = current_time
+        if ip_counter[src_ip] > 10:
+            if current_time - ip_timestamps[src_ip] < 60:
+                print(f"Alert: {src_ip} has sent more than 10 packets in the last 60 seconds!")
+                # Reset counter to avoid repeated alerts
+                ip_counter[src_ip] = 0
 
 # Background sniffing thread
 def start_sniffing():
