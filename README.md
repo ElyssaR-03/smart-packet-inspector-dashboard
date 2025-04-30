@@ -20,6 +20,7 @@ This opens the live packet sniffer window.
 
 ### CSV Logging:
 - Packets are automatically logged to `live_packet_log.csv`.
+- The CSV file is organized with columns: Timestamp, Source IP, Destination IP, Protocol, Source Port, Destination Port
 - The packet_sniff_dash.py file runs the dashboard and logs them to a csv file while it runs.
 
 ## Key Features
@@ -35,7 +36,7 @@ This opens the live packet sniffer window.
 - Keeping the dashboard updating live without freezing.
 - Writing to CSV during live packet capture safely.
 - Making the project simple but still useful for beginners.
-- Understanding the need for threading.
+- Understanding and manipulating threading for implementing background sniffing with GUI.
 - Adding an alert system without creating too many false alarms.
 
 ## Future Improvements
